@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# Link to this from /etc/cron.daily and it will e-mail a git status for each
+# repo that isn't "clean" each night.
+
+# Ryan Tucker <rtucker@gmail.com>
+
 if [ "`hostname`" = "arrogant-bastard" ]
     then SEARCHPLACES="`find /home/rtucker/dev/* -maxdepth 0 -type d | xargs`"
 elif [ "`hostname`" = "framboise" ]
@@ -8,6 +13,7 @@ elif [ "`hostname`" = "rocwiki" ]
     then SEARCHPLACES="${SEARCHPLACES} /home/rocwiki/sycamore_base"
 fi
 
+# Keep an eye on /etc since I'm using etckeeper
 SEARCHPLACES="${SEARCHPLACES} /etc"
 
 for i in ${SEARCHPLACES}
@@ -17,6 +23,8 @@ do
     git status > ${TEMPFILE} 2>&1
     if [ $? != 128 ] && [ "`tail -1 ${TEMPFILE}`" != "nothing to commit (working directory clean)" ]
     then
+        # If the exit code isn't 128 (not a git repo) and there's not
+        # nothing to commit, send a mail!
         mail -s "`hostname`:$i git status" root < ${TEMPFILE}
     fi
     rm ${TEMPFILE}
