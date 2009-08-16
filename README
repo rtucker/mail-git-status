@@ -1,0 +1,4 @@
+A shell script to e-mail me the results of "git status" each night, for
+all the various repos.  Uses conditionals to set the "search pattern" for
+each different host, so I can maintain one copy of this script.
+
