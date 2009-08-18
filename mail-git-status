@@ -10,7 +10,7 @@ if [ "`hostname`" = "arrogant-bastard" ]
 elif [ "`hostname`" = "framboise" ]
     then SEARCHPLACES="${SEARCHPLACES} /var/www"
 elif [ "`hostname`" = "rocwiki" ]
-    then SEARCHPLACES="${SEARCHPLACES} /home/rocwiki/sycamore_base"
+    then SEARCHPLACES="${SEARCHPLACES} /home/rocwiki/sycamore"
 fi
 
 # Keep an eye on /etc since I'm using etckeeper
