@@ -5,9 +5,12 @@
 
 # Ryan Tucker <rtucker@gmail.com>
 
+# find my dev directories
+SEARCHPLACES="`find /home/rtucker/dev/* -maxdepth 0 -type d | xargs`"
+
+# machine-specific situations
 if [ "`hostname`" = "arrogant-bastard" ]
-    then SEARCHPLACES="`find /home/rtucker/dev/* -maxdepth 0 -type d | xargs`"
-         SEARCHPLACES="${SEARCHPLACES} /home/rtucker/Documents/Schoolwork"
+    then SEARCHPLACES="${SEARCHPLACES} /home/rtucker/Documents/Schoolwork"
 elif [ "`hostname`" = "framboise" ]
     then SEARCHPLACES="${SEARCHPLACES} /var/www"
 elif [ "`hostname`" = "rocwiki" ]
@@ -21,7 +24,10 @@ for i in ${SEARCHPLACES}
 do
     TEMPFILE=`tempfile`
     cd $i
-    git status > ${TEMPFILE} 2>&1
+    # run some garbage collection
+    su -c "git gc" `stat -c %U .`
+    # check git status to make sure everything's been nicely committed
+    su -c "git status" `stat -c %U .` > ${TEMPFILE} 2>&1
     if [ $? != 128 ] && [ "`tail -1 ${TEMPFILE}`" != "nothing to commit (working directory clean)" ]
     then
         # If the exit code isn't 128 (not a git repo) and there's not
