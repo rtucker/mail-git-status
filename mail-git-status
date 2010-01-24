@@ -25,7 +25,7 @@ do
     TEMPFILE=`tempfile`
     cd $i
     # run some garbage collection
-    su -c "git gc" `stat -c %U .`
+    su -c "git gc --auto" `stat -c %U .`
     # check git status to make sure everything's been nicely committed
     su -c "git status" `stat -c %U .` > ${TEMPFILE} 2>&1
     if [ $? != 128 ] && [ "`tail -1 ${TEMPFILE}`" != "nothing to commit (working directory clean)" ]
